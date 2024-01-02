@@ -22,11 +22,6 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         validate: [validator.isEmail, "Please provide a valid email"],
     },
-    userName: {
-        type: String,
-        unique: true,
-    },
-    googleRefreshToken: String,
     photo: String,
     password: {
         type: String,

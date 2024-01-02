@@ -11,7 +11,7 @@ exports.createNotes = catchAsync(async (req, res, next) => {
         );
 
     await Notes.create({
-        userId: req.user.user,
+        userId: req.user.id,
         title,
         content,
     });
@@ -35,8 +35,12 @@ exports.retrieveOneNotes = catchAsync(async (req, res, next) => {
 
 exports.updateNotes = catchAsync(async (req, res, next) => {
     if (!req.params.id) return next(new AppError("Please enter the Id!"));
-    const notes = Notes.find({ _id: req.params.id, userId: req.user.id });
+    const notes = await Notes.findOne({
+        _id: req.params.id,
+        userId: req.user.id,
+    });
     if (!notes) return next(new AppError("No notes found with this ID!!"));
+    console.log(notes);
     notes.title = req.body.title || notes.title;
     notes.content = req.body.content || notes.content;
     await notes.save();
@@ -44,7 +48,7 @@ exports.updateNotes = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteNote = catchAsync(async (req, res, next) => {
-    if (!req.params.id) return next(new AppError("Please enter the Id!"));
+    if (!req.params.id) return next(new AppError("Please enter the Id!", 401));
     await Notes.deleteOne({ _id: req.params.id });
-    res.status(204);
+    res.status(204).json({});
 });

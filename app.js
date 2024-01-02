@@ -10,6 +10,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const authRouter = require("./routes/authRoutes.js");
+const notesRouter = require("./routes/notesRoutes.js");
 
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
@@ -52,6 +53,7 @@ app.use((req, res, next) => {
 
 // 3) ROUTES
 app.use("/user", authRouter);
+app.use("/notes", notesRouter);
 
 app.all("*", (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
